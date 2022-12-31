@@ -1,0 +1,61 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>ISO World</title>
+  <meta name="description" content="ISO World">
+  <meta name="author" content="SitePoint">
+
+  <meta property="og:title" content="ISO World">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="">
+  <meta property="og:description" content="Main page for ISO World HTML5 game project.">
+  <meta property="og:image" content="image.png">
+
+<!--   <link rel="icon" href="/favicon.ico">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+  <link rel="stylesheet" href="css/styles.css?v=1.0"> -->
+  <style>
+    body {
+      margin: 0;
+      background:  black;
+      font-family: sans-serif;
+      font-size:  10px;
+      font-weight: bold;
+      /*overflow:  hidden;*/
+    }
+
+    #canvas {
+      display:  block;
+      image-rendering: crisp-edges;
+    }
+
+    #debug-console {
+      position: fixed;
+      background: rgba(0,0,0,0.8);
+      font-family: 'Courier';
+      bottom: 0px;
+      left: 0px;
+      display:  none;
+      z-index: 50;
+      color:  white;
+      padding:  10px;
+      min-width: 150px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="debug-console"></div>
+  <canvas id="canvas"></canvas>
+  <script src="assets/lib/perlin.js"></script>
+  <!-- <script src="assets/lib/PerlinNoiseGenerator.js"></script> -->
+  <!-- <script src="assets/lib/p5.min.js"></script> -->
+  <script src="js/script.js"></script>
+</body>
+</html>
