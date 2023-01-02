@@ -47,11 +47,23 @@
       padding:  10px;
       min-width: 150px;
     }
+
+    #screen-menu {
+      background: rgba(0,0,0,0.8);
+      position: fixed;
+      width:  100vw;
+      height:  100vh;
+      display:  none;
+    }
   </style>
 </head>
 
 <body>
   <div id="debug-console"></div>
+  <div id="screen-menu">
+    <div class="container-menu">
+    </div>
+  </div>
   <canvas id="canvas"></canvas>
   <script src="assets/lib/perlin.js"></script>
   <!-- <script src="assets/lib/PerlinNoiseGenerator.js"></script> -->
