@@ -34,24 +34,24 @@ export const nuestrom = {
 		baseWalkingSpeed: 0.115,
 		baseRunningModifier: 1.25,
 		dayNightCycle: true,
-		dayNightLength: 60, // time in seconds
-		dayNightActiveProfile: '',
+		dayNightLength: 30, // time in seconds
+		dayNightActiveProfile: [],
 		dayNightToneProfiles: [
-			{time: 530, profile: 'rgba(5,6,55,0.8)'},
-			{time: 550, profile: 'rgba(18,15,89,0.6)'},
-			{time: 610, profile: 'rgba(88,68,155,0.5)'},
-			{time: 630, profile: 'rgba(154,102,180,0.4)'},
-			{time: 650, profile: 'rgba(222,148,178,0.3)'},
-			{time: 720, profile: 'rgba(253,198,174,0.2)'},
-			{time: 740, profile: 'rgba(255,255,255,0.0)'},
-			{time: 1730, profile: 'rgba(244,243,190,0.1)'},
-			{time: 1750, profile: 'rgba(247,205,144,0.2)'},
-			{time: 1800, profile: 'rgba(230,88,78,0.3)'},
-			{time: 1810, profile: 'rgba(151,30,103,0.4)'},
-			{time: 1820, profile: 'rgba(65,19,120,0.5)'},
-			{time: 1830, profile: 'rgba(27,18,116,0.6)'},
-			{time: 1840, profile: 'rgba(5,6,55,0.8)'},
-			{time: 1900, profile: 'rgba(3,3,34,0.8)'},
+			{time: 530, profile: [5,6,55,0.8]},
+			{time: 550, profile: [18,15,89,0.6]},
+			{time: 610, profile: [88,68,155,0.5]},
+			{time: 630, profile: [154,102,180,0.4]},
+			{time: 650, profile: [222,148,178,0.3]},
+			{time: 720, profile: [253,198,174,0.2]},
+			{time: 740, profile: [255,255,255,0.0]},
+			{time: 1730, profile: [244,243,190,0.1]},
+			{time: 1750, profile: [247,205,144,0.2]},
+			{time: 1800, profile: [230,88,78,0.3]},
+			{time: 1810, profile: [151,30,103,0.4]},
+			{time: 1820, profile: [65,19,120,0.5]},
+			{time: 1830, profile: [27,18,116,0.6]},
+			{time: 1840, profile: [5,6,55,0.8]},
+			{time: 1900, profile: [3,3,34,0.8]},
 		], // starts at "0:00am"
 		dayNightBrightnessProfile: [], // start at "0:00am"
 	},
@@ -334,9 +334,11 @@ function initRoutines() {
 		},150)
 	} else {
 		if (nuestrom.config.staggeredRender) {
-			nuestrom.config.renderInterval = setInterval(() => {
-				requestAnimationFrame(renderFrame)
-			},nuestrom.config.renderIntervalLength)
+			setTimeout(() => {
+				nuestrom.config.renderInterval = setInterval(() => {
+					requestAnimationFrame(renderFrame)
+				},nuestrom.config.renderIntervalLength)
+			},150)
 		} else {
 			renderFrame(nuestrom.config.staggeredRender)
 		}

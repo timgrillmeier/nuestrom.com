@@ -1,19 +1,23 @@
 import { nuestrom } from '../../js/nuestrom.js'
-import { terrainSprites } from '../../assets/terrain-sprites/terrain-sprites.js'
-import { treeSprites } from '../../assets/tree-sprites/tree-sprites.js'
-import { groundSprites } from '../../assets/ground-sprites/ground-sprites.js'
+import { terrainSprites, terrainSpriteCanvas, terrainSpriteMasks } from '../../assets/terrain-sprites/terrain-sprites.js'
+import { treeSprites, treeSpriteCanvas, treeSpriteMasks } from '../../assets/tree-sprites/tree-sprites.js'
+import { groundSprites, groundSpriteCanvas, groundSpriteMasks } from '../../assets/ground-sprites/ground-sprites.js'
 
 let tileSource = 'assets/tiles/32/'
 let tileAppend = '-32-base'
 let tileType = 'png'
 let tileRenderAssets = []
 let artifactRenderAssets = []
+let artifactRenderMasks = []
 let charAssetCanvas = document.createElement('canvas')
 
-export function renderFrame(staggeredRender = false) {
+export async function renderFrame(staggeredRender = false) {
 	// BENCHMARKING
 	let timeStartEpoch = new Date()
 	let timeStart = timeStartEpoch.getTime()
+
+	// Update masks
+	await updateAssetMasks()
 
 	// Get bounding x, y
 	let currentTileDisplaySizeInPixels = nuestrom.config.tilePixelBase * nuestrom.config.tileScale
@@ -58,6 +62,10 @@ export function renderFrame(staggeredRender = false) {
 	let characterDrawn = false
 	let laggardY = processingCoordBounds.yLower - 5
 
+
+	// Clear rect
+	nuestrom.functional.canvasContext.clearRect(0,0,window.innerWidth,window.innerHeight)
+
 	for (let y = processingCoordBounds.yLower; y <= processingCoordBounds.yUpper + 5; y++) {
 		for (let x = processingCoordBounds.xLower; x <= processingCoordBounds.xUpper; x++) {
 
@@ -82,10 +90,14 @@ export function renderFrame(staggeredRender = false) {
 			if (terrainTile != null) {
 				
 				if (nuestrom.config.slowRender) {
-					paintTileWithTimeout(count, nuestrom.functional.canvasContext, tileRenderAssets[terrainTile], xRender, yRender - (terrainSprites[terrainTile].d[1] * nuestrom.config.tileScale), (terrainSprites[terrainTile].d[0] * nuestrom.config.tileScale), (terrainSprites[terrainTile].d[1] * nuestrom.config.tileScale))
+					paintTileWithTimeout(count, nuestrom.functional.canvasContext, terrainSpriteCanvas[terrainTile], xRender, yRender - (terrainSprites[terrainTile].d[1] * nuestrom.config.tileScale), (terrainSprites[terrainTile].d[0] * nuestrom.config.tileScale), (terrainSprites[terrainTile].d[1] * nuestrom.config.tileScale))
+					paintTileWithTimeout(count, nuestrom.functional.canvasContext, terrainSpriteMasks[terrainTile], xRender, yRender - (terrainSprites[terrainTile].d[1] * nuestrom.config.tileScale), (terrainSprites[terrainTile].d[0] * nuestrom.config.tileScale), (terrainSprites[terrainTile].d[1] * nuestrom.config.tileScale))
 					count += countIncrement
 				} else {
-					nuestrom.functional.canvasContext.drawImage(tileRenderAssets[terrainTile], xRender, yRender - (terrainSprites[terrainTile].d[1] * nuestrom.config.tileScale), (terrainSprites[terrainTile].d[0] * nuestrom.config.tileScale), (terrainSprites[terrainTile].d[1] * nuestrom.config.tileScale))
+					nuestrom.functional.canvasContext.drawImage(terrainSpriteCanvas[terrainTile], Math.floor(xRender), Math.floor(yRender - (terrainSprites[terrainTile].d[1] * nuestrom.config.tileScale)), Math.floor((terrainSprites[terrainTile].d[0] * nuestrom.config.tileScale)), Math.floor((terrainSprites[terrainTile].d[1] * nuestrom.config.tileScale)))
+					nuestrom.functional.canvasContext.globalAlpha = nuestrom.config.dayNightActiveProfile[3]
+					nuestrom.functional.canvasContext.drawImage(terrainSpriteMasks[terrainTile], Math.floor(xRender), Math.floor(yRender - (terrainSprites[terrainTile].d[1] * nuestrom.config.tileScale)), Math.floor((terrainSprites[terrainTile].d[0] * nuestrom.config.tileScale)), Math.floor((terrainSprites[terrainTile].d[1] * nuestrom.config.tileScale)))
+					nuestrom.functional.canvasContext.globalAlpha = 1
 				}
 			}
 
@@ -116,20 +128,8 @@ export function renderFrame(staggeredRender = false) {
 				yRender = (yRender * currentTileDisplaySizeInPixels) / 3.56
 
 				if (nuestrom.world.time < 600 || nuestrom.world.time > 1830) {
-					// it's night, draw a light
-					// let grad = nuestrom.functional.canvasContext.createRadialGradient(0, 0, 10, 0,0, 20)
-					// grad.addColorStop(0,'rgba(255,255,255,0)')
-					// grad.addColorStop(0.2,'blue')
-					// grad.addColorStop(0.5,'rgba(247,205,144,1)')
-					// grad.addColorStop(0.6,'red')
-					// grad.addColorStop(1,'rgba(247,205,144,0.7)')
-
-					// nuestrom.functional.canvasContext.fillStyle = grad
-					// nuestrom.functional.canvasContext.setTransform((currentTileDisplaySizeInPixels * 2),0,0,currentTileDisplaySizeInPixels,0,0);
-					// nuestrom.functional.canvasContext.fillRect(xRender, yRender, xRender + 100, yRender + 100)
-				
 					
-					console.log(xRender)
+					// console.log(xRender)
 					let gradient = nuestrom.functional.canvasContext.createRadialGradient(xRender, yRender * 2, currentTileDisplaySizeInPixels / 3, xRender, yRender * 2, currentTileDisplaySizeInPixels);
 					gradient.addColorStop(1, "rgba(244,243,190, 0.0)");
 					gradient.addColorStop(0.2, "rgba(244,243,190, 0.3)");
@@ -169,22 +169,18 @@ export function renderFrame(staggeredRender = false) {
 					paintTileWithTimeout(count, nuestrom.functional.canvasContext, artifactRenderAssets[verticalArtefact], xRender, laggardYRender - (treeSprites[verticalArtefact].d[1] * nuestrom.config.tileScale), (treeSprites[verticalArtefact].d[0] * nuestrom.config.tileScale), (treeSprites[verticalArtefact].d[1] * nuestrom.config.tileScale))
 					count += countIncrement
 				} else {
-					nuestrom.functional.canvasContext.drawImage(artifactRenderAssets[verticalArtefact], xRender, yRender - (treeSprites[verticalArtefact].d[1] * nuestrom.config.tileScale), (treeSprites[verticalArtefact].d[0] * nuestrom.config.tileScale), (treeSprites[verticalArtefact].d[1] * nuestrom.config.tileScale))
+					nuestrom.functional.canvasContext.drawImage(artifactRenderAssets[verticalArtefact], Math.floor(xRender), Math.floor(yRender - (artifactRenderAssets[verticalArtefact].offsetHeight * nuestrom.config.tileScale)), Math.floor((artifactRenderAssets[verticalArtefact].offsetWidth * nuestrom.config.tileScale)), Math.floor((artifactRenderAssets[verticalArtefact].offsetHeight * nuestrom.config.tileScale)))
+					let verticalScaling = 0
+					let horizontalScaling = 0
+					nuestrom.functional.canvasContext.globalAlpha = nuestrom.config.dayNightActiveProfile[3]
+					nuestrom.functional.canvasContext.drawImage(artifactRenderMasks[verticalArtefact], Math.floor(xRender - horizontalScaling), Math.floor(yRender - verticalScaling - (artifactRenderAssets[verticalArtefact].offsetHeight * nuestrom.config.tileScale)), Math.floor((artifactRenderAssets[verticalArtefact].offsetWidth * nuestrom.config.tileScale) + horizontalScaling), Math.floor((artifactRenderAssets[verticalArtefact].offsetHeight * nuestrom.config.tileScale) + verticalScaling))
+					nuestrom.functional.canvasContext.globalAlpha = 1
 				}
 			}
 
 			laggardY++
 		}
 	}	
-
-	// Draw day/night
-	// console.log(nuestrom.functional.dayNightActiveProfile)
-	// console.log(nuestrom.functional.dayNightActiveAlpha)
-	nuestrom.functional.canvasContext.fillStyle = nuestrom.config.dayNightActiveProfile
-	nuestrom.functional.canvasContext.globalAlpha = nuestrom.config.dayNightActiveAlpha
-	nuestrom.functional.canvasContext.fillRect(0, 0, window.innerWidth, window.innerHeight)
-
-	nuestrom.functional.canvasContext.globalAlpha = 1
 	
 
 	// BENCHMARKING
@@ -192,6 +188,65 @@ export function renderFrame(staggeredRender = false) {
 	let timeEnd = timeEndEpoch.getTime()
 
 	nuestrom.functional.renderFrameTime = timeEnd - timeStart
+}
+
+async function updateAssetMasks() {
+	// Generate masks for terrain sprites
+	terrainSpriteMasks.splice(0,(terrainSpriteMasks.length - 1))
+	for (let i = 0; i < terrainSpriteCanvas.length; i++) {
+		let assetCanvas = document.createElement('canvas')
+		assetCanvas.style.width = terrainSprites[i].d[0]
+		assetCanvas.style.height = terrainSprites[i].d[1]
+		assetCanvas.setAttribute('width', terrainSprites[i].d[0] + 'px')
+		assetCanvas.setAttribute('height', terrainSprites[i].d[1] + 'px')
+		let assetCanvasContext = assetCanvas.getContext('2d')
+		let spriteCanvasContext = terrainSpriteCanvas[i].getContext('2d')
+
+		let imgData = spriteCanvasContext.getImageData(0, 0, terrainSprites[i].d[0], terrainSprites[i].d[1], { colorSpace: "srgb", willReadFrequently: true })
+		for (let j = 0; j < imgData.data.length; j+=4) {
+			imgData.data[j] = (nuestrom.config.dayNightActiveProfile[0])
+			imgData.data[j+1] = (nuestrom.config.dayNightActiveProfile[1])
+			imgData.data[j+2] = (nuestrom.config.dayNightActiveProfile[2])
+		}
+
+		assetCanvasContext.putImageData(imgData,0,0)
+		terrainSpriteMasks.push(assetCanvas)
+
+		// if (nuestrom.config.renderAssetSamples) {
+		// 	document.body.appendChild(terrainSpriteMasks[i])
+		// }
+	}
+
+	artifactRenderMasks.splice(0,(artifactRenderMasks.length - 1))
+	for (let i = 0; i < artifactRenderAssets.length; i++) {
+		if (artifactRenderAssets[i].offsetWidth != 0) {
+			let assetCanvas = document.createElement('canvas')
+			assetCanvas.style.width = artifactRenderAssets[i].offsetWidth
+			assetCanvas.style.height = artifactRenderAssets[i].offsetHeight
+			assetCanvas.setAttribute('width', artifactRenderAssets[i].offsetWidth + 'px')
+			assetCanvas.setAttribute('height', artifactRenderAssets[i].offsetHeight + 'px')
+			let assetCanvasContext = assetCanvas.getContext('2d')
+			let spriteCanvasContext = artifactRenderAssets[i].getContext('2d')
+
+			let imgData = spriteCanvasContext.getImageData(0, 0, artifactRenderAssets[i].offsetWidth, artifactRenderAssets[i].offsetHeight, { colorSpace: "srgb", willReadFrequently: true })
+			for (let j = 0; j < imgData.data.length; j+=4) {
+				imgData.data[j] = (nuestrom.config.dayNightActiveProfile[0])
+				imgData.data[j+1] = (nuestrom.config.dayNightActiveProfile[1])
+				imgData.data[j+2] = (nuestrom.config.dayNightActiveProfile[2])
+			}
+
+			assetCanvasContext.putImageData(imgData,0,0)
+			artifactRenderMasks.push(assetCanvas)
+
+			// if (nuestrom.config.renderAssetSamples) {
+			// 	document.body.appendChild(artifactRenderMasks[i])
+			// }
+		}
+	}
+
+	// use for tree sprites
+	// let imgData = terrainSpriteCanvas[i].getImageData(0, 0, treeSprites[i].d[0], treeSprites[i].d[1], { colorSpace: "srgb", willReadFrequently: true })
+
 }
 
 function drawChar(xTranslate, yTranslate, currentTileDisplaySizeInPixels) {
@@ -248,9 +303,10 @@ export function preRender() {
 			assetCanvasContext.drawImage(asset, 0, 0, terrainSprites[i].d[0], terrainSprites[i].d[1])
 		}
 		
-		tileRenderAssets.push(assetCanvas)
+		terrainSpriteCanvas.push(assetCanvas)
+		document.getElementById('sprite-house').appendChild(terrainSpriteCanvas[i])
 		if (nuestrom.config.renderAssetSamples) {
-			document.body.appendChild(tileRenderAssets[i])
+			document.body.appendChild(terrainSpriteCanvas[i])
 		}
 	}
 
@@ -273,9 +329,11 @@ export function preRender() {
 
 		asset.onload = () => {
 			assetCanvasContext.drawImage(asset, 0, 0, treeSprites[i].d[0], treeSprites[i].d[1])
+			
 		}
 
 		artifactRenderAssets.push(assetCanvas)
+		document.getElementById('sprite-house').appendChild(artifactRenderAssets[i])
 		if (nuestrom.config.renderAssetSamples) {
 			document.body.appendChild(artifactRenderAssets[i])
 		}
@@ -298,6 +356,7 @@ export function preRender() {
 		assetCanvasContext.drawImage(charAsset, 0, 0, 32, 32)
 	}
 
+	document.getElementById('sprite-house').appendChild(charAssetCanvas)
 	if (nuestrom.config.renderAssetSamples) {
 		document.body.appendChild(charAssetCanvas)
 	}

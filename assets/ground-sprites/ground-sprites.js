@@ -7,4 +7,7 @@ const groundSprites = [
 	{s:'puddle',d:[32,16],h: false},
 ]
 
-export { groundSprites }
+const groundSpriteCanvas = []
+const groundSpriteMasks = []
+
+export { groundSprites, groundSpriteCanvas, groundSpriteMasks }

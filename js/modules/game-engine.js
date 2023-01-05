@@ -104,6 +104,12 @@ function debugmode() {
 		output += '<br>'
 	}
 
+	if (nuestrom.config.dayNightCycle != '') {
+		output += 'Time:<br>'
+		output += nuestrom.world.time.toFixed(0) + '<br>'
+		output += '<br>'
+	}
+
 	output += 'Keys:<br>'
 	output += 'W: ' + nuestrom.functional.keyState['w'] + '<br>'
 	output += 'A: ' + nuestrom.functional.keyState['a'] + '<br>'

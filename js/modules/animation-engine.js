@@ -21,7 +21,8 @@ function processDayNightCycle() {
 
 			nuestrom.config.dayNightActiveProfile = nuestrom.config.dayNightToneProfiles[i].profile
 			nuestrom.config.dayNightActiveAlpha = nuestrom.config.dayNightToneProfiles[i].alpha
-			matchFound = true
+			matchFound = false
 		}
 	}
 }
+

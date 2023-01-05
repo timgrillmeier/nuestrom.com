@@ -5,4 +5,7 @@ const terrainSprites = [
 	{s:'dirt',d:[32,16]},
 ]
 
-export { terrainSprites }
+const terrainSpriteCanvas = []
+const terrainSpriteMasks = []
+
+export { terrainSprites, terrainSpriteCanvas, terrainSpriteMasks }

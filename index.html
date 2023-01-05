@@ -46,6 +46,7 @@
       color:  white;
       padding:  10px;
       min-width: 150px;
+      border-radius: 0 10px 0 0;
     }
 
     #screen-menu {
@@ -55,11 +56,22 @@
       height:  100vh;
       display:  none;
     }
+
+    #sprite-house {
+      opacity:  0.0001;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 1px;
+      height: 1px;
+      pointer-events: none;
+    }
   </style>
 </head>
 
 <body>
   <div id="debug-console"></div>
+  <div id="sprite-house"></div>
   <div id="screen-menu">
     <div class="container-menu">
     </div>
