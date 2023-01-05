@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>ISO World</title>
+  <title>Nuestrom</title>
   <meta name="description" content="ISO World">
   <meta name="author" content="SitePoint">
 
@@ -65,9 +65,10 @@
     </div>
   </div>
   <canvas id="canvas"></canvas>
-  <script src="assets/lib/perlin.js"></script>
-  <!-- <script src="assets/lib/PerlinNoiseGenerator.js"></script> -->
-  <!-- <script src="assets/lib/p5.min.js"></script> -->
-  <script src="js/script.js"></script>
+  <script type="module" src="js/nuestrom.js"></script>
+  <script type="module">
+    import nuestrom from './js/nuestrom.js'
+    nuestrom()
+  </script>
 </body>
 </html>
