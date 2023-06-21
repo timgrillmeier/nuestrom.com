@@ -58,7 +58,7 @@ export async function renderFrame(staggeredRender = false) {
 	}
 
 	let count = 0
-	let countIncrement = 15
+	let countIncrement = 5
 	let characterDrawn = false
 	let laggardY = processingCoordBounds.yLower - 5
 
@@ -91,7 +91,7 @@ export async function renderFrame(staggeredRender = false) {
 				
 				if (nuestrom.config.slowRender) {
 					paintTileWithTimeout(count, nuestrom.functional.canvasContext, terrainSpriteCanvas[terrainTile], xRender, yRender - (terrainSprites[terrainTile].d[1] * nuestrom.config.tileScale), (terrainSprites[terrainTile].d[0] * nuestrom.config.tileScale), (terrainSprites[terrainTile].d[1] * nuestrom.config.tileScale))
-					paintTileWithTimeout(count, nuestrom.functional.canvasContext, terrainSpriteMasks[terrainTile], xRender, yRender - (terrainSprites[terrainTile].d[1] * nuestrom.config.tileScale), (terrainSprites[terrainTile].d[0] * nuestrom.config.tileScale), (terrainSprites[terrainTile].d[1] * nuestrom.config.tileScale))
+					paintMaskWithTimeout(nuestrom.config.dayNightActiveProfile[3], count, nuestrom.functional.canvasContext, terrainSpriteMasks[terrainTile], xRender, yRender - (terrainSprites[terrainTile].d[1] * nuestrom.config.tileScale), (terrainSprites[terrainTile].d[0] * nuestrom.config.tileScale), (terrainSprites[terrainTile].d[1] * nuestrom.config.tileScale))
 					count += countIncrement
 				} else {
 					nuestrom.functional.canvasContext.drawImage(terrainSpriteCanvas[terrainTile], Math.floor(xRender), Math.floor(yRender - (terrainSprites[terrainTile].d[1] * nuestrom.config.tileScale)), Math.floor((terrainSprites[terrainTile].d[0] * nuestrom.config.tileScale)), Math.floor((terrainSprites[terrainTile].d[1] * nuestrom.config.tileScale)))
@@ -100,11 +100,10 @@ export async function renderFrame(staggeredRender = false) {
 					nuestrom.functional.canvasContext.globalAlpha = 1
 				}
 			}
-
-			laggardY++
 		}
 	}	
 
+	countIncrement = 15
 	for (let y = processingCoordBounds.yLower; y <= processingCoordBounds.yUpper + 5; y++) {
 		for (let x = processingCoordBounds.xLower; x <= processingCoordBounds.xUpper; x++) {
 			if (y > (nuestrom.player.coords.y + 0.5) && !characterDrawn) {
@@ -143,7 +142,8 @@ export async function renderFrame(staggeredRender = false) {
 				}
 
 				characterDrawn = true 
-				drawChar(xTranslate, yTranslate, currentTileDisplaySizeInPixels)
+				drawChar(xTranslate, yTranslate, currentTileDisplaySizeInPixels, count)
+				count += countIncrement
 			} 
 
 			let xRender = 0
@@ -163,22 +163,21 @@ export async function renderFrame(staggeredRender = false) {
 			}
 			yRender = (yRender * currentTileDisplaySizeInPixels) / 3.56
 
+			let verticalScaling = 0
+			let horizontalScaling = 0
 			let verticalArtefact = getVerticalArtefact(x, y)
 			if (verticalArtefact != null) {
 				if (nuestrom.config.slowRender) {
-					paintTileWithTimeout(count, nuestrom.functional.canvasContext, artifactRenderAssets[verticalArtefact], xRender, laggardYRender - (treeSprites[verticalArtefact].d[1] * nuestrom.config.tileScale), (treeSprites[verticalArtefact].d[0] * nuestrom.config.tileScale), (treeSprites[verticalArtefact].d[1] * nuestrom.config.tileScale))
+					paintTileWithTimeout(count, nuestrom.functional.canvasContext, artifactRenderAssets[verticalArtefact], Math.floor(xRender), Math.floor(yRender - (artifactRenderAssets[verticalArtefact].offsetHeight * nuestrom.config.tileScale)), Math.floor((artifactRenderAssets[verticalArtefact].offsetWidth * nuestrom.config.tileScale)), Math.floor((artifactRenderAssets[verticalArtefact].offsetHeight * nuestrom.config.tileScale)))
+					paintMaskWithTimeout(nuestrom.config.dayNightActiveProfile[3], count, nuestrom.functional.canvasContext, artifactRenderMasks[verticalArtefact], Math.floor(xRender - horizontalScaling), Math.floor(yRender - verticalScaling - (artifactRenderAssets[verticalArtefact].offsetHeight * nuestrom.config.tileScale)), Math.floor((artifactRenderAssets[verticalArtefact].offsetWidth * nuestrom.config.tileScale) + horizontalScaling), Math.floor((artifactRenderAssets[verticalArtefact].offsetHeight * nuestrom.config.tileScale) + verticalScaling))
 					count += countIncrement
 				} else {
 					nuestrom.functional.canvasContext.drawImage(artifactRenderAssets[verticalArtefact], Math.floor(xRender), Math.floor(yRender - (artifactRenderAssets[verticalArtefact].offsetHeight * nuestrom.config.tileScale)), Math.floor((artifactRenderAssets[verticalArtefact].offsetWidth * nuestrom.config.tileScale)), Math.floor((artifactRenderAssets[verticalArtefact].offsetHeight * nuestrom.config.tileScale)))
-					let verticalScaling = 0
-					let horizontalScaling = 0
 					nuestrom.functional.canvasContext.globalAlpha = nuestrom.config.dayNightActiveProfile[3]
-					nuestrom.functional.canvasContext.drawImage(artifactRenderMasks[verticalArtefact], Math.floor(xRender - horizontalScaling), Math.floor(yRender - verticalScaling - (artifactRenderAssets[verticalArtefact].offsetHeight * nuestrom.config.tileScale)), Math.floor((artifactRenderAssets[verticalArtefact].offsetWidth * nuestrom.config.tileScale) + horizontalScaling), Math.floor((artifactRenderAssets[verticalArtefact].offsetHeight * nuestrom.config.tileScale) + verticalScaling))
+					nuestrom.functional.canvasContext.drawImage(artifactRenderMasks[verticalArtefact + 1], Math.floor(xRender - horizontalScaling), Math.floor(yRender - verticalScaling - (artifactRenderAssets[verticalArtefact].offsetHeight * nuestrom.config.tileScale)), Math.floor((artifactRenderAssets[verticalArtefact].offsetWidth * nuestrom.config.tileScale) + horizontalScaling), Math.floor((artifactRenderAssets[verticalArtefact].offsetHeight * nuestrom.config.tileScale) + verticalScaling))
 					nuestrom.functional.canvasContext.globalAlpha = 1
 				}
 			}
-
-			laggardY++
 		}
 	}	
 	
@@ -212,6 +211,8 @@ async function updateAssetMasks() {
 		assetCanvasContext.putImageData(imgData,0,0)
 		terrainSpriteMasks.push(assetCanvas)
 
+		document.getElementById('mask-house').innerHTML = ''
+		document.getElementById('mask-house').appendChild(terrainSpriteMasks[i])
 		// if (nuestrom.config.renderAssetSamples) {
 		// 	document.body.appendChild(terrainSpriteMasks[i])
 		// }
@@ -231,6 +232,7 @@ async function updateAssetMasks() {
 			let imgData = spriteCanvasContext.getImageData(0, 0, artifactRenderAssets[i].offsetWidth, artifactRenderAssets[i].offsetHeight, { colorSpace: "srgb", willReadFrequently: true })
 			for (let j = 0; j < imgData.data.length; j+=4) {
 				imgData.data[j] = (nuestrom.config.dayNightActiveProfile[0])
+				// imgData.data[j] = 75
 				imgData.data[j+1] = (nuestrom.config.dayNightActiveProfile[1])
 				imgData.data[j+2] = (nuestrom.config.dayNightActiveProfile[2])
 			}
@@ -238,18 +240,22 @@ async function updateAssetMasks() {
 			assetCanvasContext.putImageData(imgData,0,0)
 			artifactRenderMasks.push(assetCanvas)
 
+			document.getElementById('mask-house').innerHTML = ''
+			document.getElementById('mask-house').appendChild(artifactRenderMasks[i])
 			// if (nuestrom.config.renderAssetSamples) {
 			// 	document.body.appendChild(artifactRenderMasks[i])
 			// }
 		}
 	}
 
+	// console.log(artifactRenderMasks)
+
 	// use for tree sprites
 	// let imgData = terrainSpriteCanvas[i].getImageData(0, 0, treeSprites[i].d[0], treeSprites[i].d[1], { colorSpace: "srgb", willReadFrequently: true })
 
 }
 
-function drawChar(xTranslate, yTranslate, currentTileDisplaySizeInPixels) {
+function drawChar(xTranslate, yTranslate, currentTileDisplaySizeInPixels, count = 0) {
 	// Draw rect in player coords
 	let xRender = 0
 	if (nuestrom.player.coords.x > 0) {
@@ -271,7 +277,6 @@ function drawChar(xTranslate, yTranslate, currentTileDisplaySizeInPixels) {
 	// nuestrom.functional.canvasContext.fillRect(xRender, yRender, 8, 8)
 	if (nuestrom.config.slowRender) {
 		paintTileWithTimeout(count, nuestrom.functional.canvasContext, charAssetCanvas,xRender - (currentTileDisplaySizeInPixels / 2), yRender - currentTileDisplaySizeInPixels, currentTileDisplaySizeInPixels, currentTileDisplaySizeInPixels)
-		count += countIncrement
 		// setTimeout(() => {
 		// 	nuestrom.functional.canvasContext.fillStyle = 'blue'
 		// 	nuestrom.functional.canvasContext.fillRect(xRender, yRender, 8, 8)
@@ -329,7 +334,6 @@ export function preRender() {
 
 		asset.onload = () => {
 			assetCanvasContext.drawImage(asset, 0, 0, treeSprites[i].d[0], treeSprites[i].d[1])
-			
 		}
 
 		artifactRenderAssets.push(assetCanvas)
@@ -365,6 +369,14 @@ export function preRender() {
 function paintTileWithTimeout(delay, ctx, asset, x, y, xoffset, yoffset) {
 	setTimeout(() => {
 		ctx.drawImage(asset, x, y, xoffset, yoffset)
+	},delay)
+}
+
+function paintMaskWithTimeout(alpha, delay, ctx, asset, x, y, xoffset, yoffset) {
+	setTimeout(() => {
+		ctx.globalAlpha = alpha
+		ctx.drawImage(asset, x, y, xoffset, yoffset)
+		ctx.globalAlpha = 1
 	},delay)
 }
 

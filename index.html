@@ -25,7 +25,7 @@
       margin: 0;
       background:  black;
       font-family: sans-serif;
-      font-size:  10px;
+      font-size:  20px;
       font-weight: bold;
       /*overflow:  hidden;*/
     }
@@ -45,7 +45,7 @@
       z-index: 50;
       color:  white;
       padding:  10px;
-      min-width: 150px;
+      min-width: 250px;
       border-radius: 0 10px 0 0;
     }
 
@@ -57,7 +57,8 @@
       display:  none;
     }
 
-    #sprite-house {
+    #sprite-house,
+    #mask-house {
       opacity:  0.0001;
       position: fixed;
       top: 0;
@@ -72,6 +73,7 @@
 <body>
   <div id="debug-console"></div>
   <div id="sprite-house"></div>
+  <div id="mask-house"></div>
   <div id="screen-menu">
     <div class="container-menu">
     </div>

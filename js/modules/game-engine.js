@@ -180,7 +180,9 @@ function generateWorldArtefact(x, y) {
 	seed(nuestrom.world.treeSeed)
 	let verticalArtefact = Math.floor(simplex2(x / 1, y / 0.5) * 4)
 
-	if (verticalArtefact >= 1) {
+	if (verticalArtefact >= 2) {
+		verticalArtefact = 1
+	} else if (verticalArtefact == 1) {
 		verticalArtefact = 0
 	} else {
 		verticalArtefact = null

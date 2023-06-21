@@ -20,8 +20,7 @@ function processDayNightCycle() {
 		if (!matchFound && nuestrom.world.time > nuestrom.config.dayNightToneProfiles[i].time) {
 
 			nuestrom.config.dayNightActiveProfile = nuestrom.config.dayNightToneProfiles[i].profile
-			nuestrom.config.dayNightActiveAlpha = nuestrom.config.dayNightToneProfiles[i].alpha
-			matchFound = false
+			matchFound = true
 		}
 	}
 }

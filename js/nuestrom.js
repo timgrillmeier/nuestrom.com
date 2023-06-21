@@ -16,7 +16,7 @@ export const nuestrom = {
 		debugMode: true,
 		singleRun: false,
 		slowRender: false,
-		renderAssetSamples: false,
+		renderAssetSamples: true,
 		staggeredRender: true,
 		terrainNoiseScale: 12,
 		tileScale: 4,
