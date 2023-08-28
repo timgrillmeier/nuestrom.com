@@ -13,10 +13,10 @@ export const nuestrom = {
 	worldAmendments: {},
 	worldTerrain: {},
 	config: {
-		debugMode: true,
+		debugMode: false,
 		singleRun: false,
 		slowRender: false,
-		renderAssetSamples: true,
+		renderAssetSamples: false,
 		staggeredRender: true,
 		terrainNoiseScale: 12,
 		tileScale: 4,

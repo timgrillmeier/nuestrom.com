@@ -717,6 +717,7 @@ function renderFramev1() {
 
 
 		// Add character
+		/*
 		if (charDrawn == false && originY >= (windowDimensions.height / 2) + (charDimensions[1] / 2)) {
 			charDrawn = true // mark as drawn
 			canvasContext.fillStyle = 'darkred'
@@ -739,6 +740,7 @@ function renderFramev1() {
 				canvasContext.drawImage(charAssetCanvas, ((tileRenderSizeInPixels / 32) * (windowDimensions.width / 2) - (charDimensions[0] / 2)),((tileRenderSizeInPixels / 32) * (windowDimensions.height / 2) - (charDimensions[1] / 2)),((tileRenderSizeInPixels / 32) * charDimensions[0]),((tileRenderSizeInPixels / 32) * charDimensions[1]))
 			}
 		}
+		*/
 
 
 		for (let j = Math.floor(cameraX - renderSampleFromCameraPosOnX); j < cameraX + renderSampleFromCameraPosOnX; j++) {

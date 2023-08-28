@@ -1,0 +1,68 @@
+body {
+	font-family: Helvetica Neue,Helvetica,Arial,sans-serif;
+
+	min-width: 100vw;
+	min-height: 100vh;
+	margin: 0;
+	overflow: hidden;
+
+	background: #000000;
+}
+
+#title {
+	min-width: 100vw;
+	min-height: 100vh;
+	position: absolute;
+	top: 0;
+	left: 0;
+	background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-image: url('../assets/images/menu-bg.png');
+}
+
+#title .menu {
+	text-align: center;
+	margin: 40% auto 0;
+	border-radius: 4px;
+	padding: 0 20px 0px;
+	width: 200px;
+/*	height: 150px;*/
+	background: rgba(0,0,0,0.7);
+	border: 2px solid rgba(100,100,100,0.4);
+}
+
+#title .menu h1 {
+	color: #FFFFFF;
+	position: relative;
+	margin-bottom: 30px;
+	font-weight: normal;
+}
+
+#title .menu h1:after {
+	width: 100px;
+	height: 2px;
+	position: absolute;
+	bottom: -17px;
+	left: 50%;
+	margin-left: -50px;
+	background: rgba(0,0,0,0.7);
+	content: '';
+}
+
+#title .menu p {
+	color: #FFFFFF;
+	text-align: center;
+	font-weight: bold;
+	font-size: 18px;
+}
+
+#title .version {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	color: #FFFFFF;
+	font-size: 14px;
+	padding: 5px;
+	font-weight: bold;
+}
