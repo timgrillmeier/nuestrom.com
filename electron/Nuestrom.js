@@ -1,4 +1,5 @@
-console.log('Electron init success')
-console.log('Mounting assets...')
-console.log('Assets loaded.')
-console.log('Nuestrom initialised.')
+document.getElementById("closeApp").addEventListener("click", closeApp)
+
+function closeApp(){
+  window.close()
+}

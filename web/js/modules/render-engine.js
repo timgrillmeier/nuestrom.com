@@ -91,11 +91,15 @@ export async function renderFrame(staggeredRender = false) {
 				
 				if (nuestrom.config.slowRender) {
 					paintTileWithTimeout(count, nuestrom.functional.canvasContext, terrainSpriteCanvas[terrainTile], xRender, yRender - (terrainSprites[terrainTile].d[1] * nuestrom.config.tileScale), (terrainSprites[terrainTile].d[0] * nuestrom.config.tileScale), (terrainSprites[terrainTile].d[1] * nuestrom.config.tileScale))
-					paintMaskWithTimeout(nuestrom.config.dayNightActiveProfile[3], count, nuestrom.functional.canvasContext, terrainSpriteMasks[terrainTile], xRender, yRender - (terrainSprites[terrainTile].d[1] * nuestrom.config.tileScale), (terrainSprites[terrainTile].d[0] * nuestrom.config.tileScale), (terrainSprites[terrainTile].d[1] * nuestrom.config.tileScale))
+					if (nuestrom.config.dayNightCycle) {
+						paintMaskWithTimeout(nuestrom.config.dayNightActiveProfile[3], count, nuestrom.functional.canvasContext, terrainSpriteMasks[terrainTile], xRender, yRender - (terrainSprites[terrainTile].d[1] * nuestrom.config.tileScale), (terrainSprites[terrainTile].d[0] * nuestrom.config.tileScale), (terrainSprites[terrainTile].d[1] * nuestrom.config.tileScale))
+					}
 					count += countIncrement
 				} else {
 					nuestrom.functional.canvasContext.drawImage(terrainSpriteCanvas[terrainTile], Math.floor(xRender), Math.floor(yRender - (terrainSprites[terrainTile].d[1] * nuestrom.config.tileScale)), Math.floor((terrainSprites[terrainTile].d[0] * nuestrom.config.tileScale)), Math.floor((terrainSprites[terrainTile].d[1] * nuestrom.config.tileScale)))
-					nuestrom.functional.canvasContext.globalAlpha = nuestrom.config.dayNightActiveProfile[3]
+					if (nuestrom.config.dayNightCycle) {
+						nuestrom.functional.canvasContext.globalAlpha = nuestrom.config.dayNightActiveProfile[3]
+					}
 					nuestrom.functional.canvasContext.drawImage(terrainSpriteMasks[terrainTile], Math.floor(xRender), Math.floor(yRender - (terrainSprites[terrainTile].d[1] * nuestrom.config.tileScale)), Math.floor((terrainSprites[terrainTile].d[0] * nuestrom.config.tileScale)), Math.floor((terrainSprites[terrainTile].d[1] * nuestrom.config.tileScale)))
 					nuestrom.functional.canvasContext.globalAlpha = 1
 				}
@@ -169,12 +173,16 @@ export async function renderFrame(staggeredRender = false) {
 			if (verticalArtefact != null) {
 				if (nuestrom.config.slowRender) {
 					paintTileWithTimeout(count, nuestrom.functional.canvasContext, artifactRenderAssets[verticalArtefact], Math.floor(xRender), Math.floor(yRender - (artifactRenderAssets[verticalArtefact].offsetHeight * nuestrom.config.tileScale)), Math.floor((artifactRenderAssets[verticalArtefact].offsetWidth * nuestrom.config.tileScale)), Math.floor((artifactRenderAssets[verticalArtefact].offsetHeight * nuestrom.config.tileScale)))
-					paintMaskWithTimeout(nuestrom.config.dayNightActiveProfile[3], count, nuestrom.functional.canvasContext, artifactRenderMasks[verticalArtefact], Math.floor(xRender - horizontalScaling), Math.floor(yRender - verticalScaling - (artifactRenderAssets[verticalArtefact].offsetHeight * nuestrom.config.tileScale)), Math.floor((artifactRenderAssets[verticalArtefact].offsetWidth * nuestrom.config.tileScale) + horizontalScaling), Math.floor((artifactRenderAssets[verticalArtefact].offsetHeight * nuestrom.config.tileScale) + verticalScaling))
+					if (nuestrom.config.dayNightCycle) {
+						paintMaskWithTimeout(nuestrom.config.dayNightActiveProfile[3], count, nuestrom.functional.canvasContext, artifactRenderMasks[verticalArtefact], Math.floor(xRender - horizontalScaling), Math.floor(yRender - verticalScaling - (artifactRenderAssets[verticalArtefact].offsetHeight * nuestrom.config.tileScale)), Math.floor((artifactRenderAssets[verticalArtefact].offsetWidth * nuestrom.config.tileScale) + horizontalScaling), Math.floor((artifactRenderAssets[verticalArtefact].offsetHeight * nuestrom.config.tileScale) + verticalScaling))
+					}
 					count += countIncrement
 				} else {
 					nuestrom.functional.canvasContext.drawImage(artifactRenderAssets[verticalArtefact], Math.floor(xRender), Math.floor(yRender - (artifactRenderAssets[verticalArtefact].offsetHeight * nuestrom.config.tileScale)), Math.floor((artifactRenderAssets[verticalArtefact].offsetWidth * nuestrom.config.tileScale)), Math.floor((artifactRenderAssets[verticalArtefact].offsetHeight * nuestrom.config.tileScale)))
-					nuestrom.functional.canvasContext.globalAlpha = nuestrom.config.dayNightActiveProfile[3]
-					nuestrom.functional.canvasContext.drawImage(artifactRenderMasks[verticalArtefact + 1], Math.floor(xRender - horizontalScaling), Math.floor(yRender - verticalScaling - (artifactRenderAssets[verticalArtefact].offsetHeight * nuestrom.config.tileScale)), Math.floor((artifactRenderAssets[verticalArtefact].offsetWidth * nuestrom.config.tileScale) + horizontalScaling), Math.floor((artifactRenderAssets[verticalArtefact].offsetHeight * nuestrom.config.tileScale) + verticalScaling))
+					if (nuestrom.config.dayNightCycle) {
+						nuestrom.functional.canvasContext.globalAlpha = nuestrom.config.dayNightActiveProfile[3]
+						nuestrom.functional.canvasContext.drawImage(artifactRenderMasks[verticalArtefact + 1], Math.floor(xRender - horizontalScaling), Math.floor(yRender - verticalScaling - (artifactRenderAssets[verticalArtefact].offsetHeight * nuestrom.config.tileScale)), Math.floor((artifactRenderAssets[verticalArtefact].offsetWidth * nuestrom.config.tileScale) + horizontalScaling), Math.floor((artifactRenderAssets[verticalArtefact].offsetHeight * nuestrom.config.tileScale) + verticalScaling))
+					}
 					nuestrom.functional.canvasContext.globalAlpha = 1
 				}
 			}
@@ -202,10 +210,12 @@ async function updateAssetMasks() {
 		let spriteCanvasContext = terrainSpriteCanvas[i].getContext('2d')
 
 		let imgData = spriteCanvasContext.getImageData(0, 0, terrainSprites[i].d[0], terrainSprites[i].d[1], { colorSpace: "srgb", willReadFrequently: true })
-		for (let j = 0; j < imgData.data.length; j+=4) {
-			imgData.data[j] = (nuestrom.config.dayNightActiveProfile[0])
-			imgData.data[j+1] = (nuestrom.config.dayNightActiveProfile[1])
-			imgData.data[j+2] = (nuestrom.config.dayNightActiveProfile[2])
+		if (nuestrom.config.dayNightCycle) {
+			for (let j = 0; j < imgData.data.length; j+=4) {
+				imgData.data[j] = (nuestrom.config.dayNightActiveProfile[0])
+				imgData.data[j+1] = (nuestrom.config.dayNightActiveProfile[1])
+				imgData.data[j+2] = (nuestrom.config.dayNightActiveProfile[2])
+			}
 		}
 
 		assetCanvasContext.putImageData(imgData,0,0)
