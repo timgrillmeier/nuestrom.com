@@ -13,7 +13,7 @@ export const nuestrom = {
 	worldAmendments: {},
 	worldTerrain: {},
 	config: {
-		debugMode: false,
+		debugMode: true,
 		singleRun: false,
 		slowRender: false,
 		renderAssetSamples: false,
