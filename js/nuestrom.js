@@ -33,7 +33,7 @@ export const nuestrom = {
 		renderTileSlack: 0,
 		baseWalkingSpeed: 0.115,
 		baseRunningModifier: 1.25,
-		dayNightCycle: false,
+		dayNightCycle: true,
 		dayNightLength: 1, // time in seconds
 		dayNightActiveProfile: [],
 		dayNightToneProfiles: [
