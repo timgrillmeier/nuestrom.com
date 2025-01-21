@@ -13,7 +13,7 @@ export const nuestrom = {
 	worldAmendments: {},
 	worldTerrain: {},
 	config: {
-		debugMode: false,
+		debugMode: true,
 		singleRun: false,
 		slowRender: false,
 		renderAssetSamples: false,
@@ -33,8 +33,8 @@ export const nuestrom = {
 		renderTileSlack: 0,
 		baseWalkingSpeed: 0.115,
 		baseRunningModifier: 1.25,
-		dayNightCycle: false,
-		dayNightLength: 1, // time in seconds
+		dayNightCycle: true,
+		dayNightLength: 30, // time in seconds
 		dayNightActiveProfile: [],
 		dayNightToneProfiles: [
 			{time: 530, profile: [5,6,55,0.8]},
